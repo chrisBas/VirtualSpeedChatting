@@ -1,1 +1,6 @@
+# Modules
 node_modules/
+
+# SSL
+cert.pem
+key.pem
