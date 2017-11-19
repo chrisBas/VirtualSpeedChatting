@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Realtime communication with WebRTC</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/lib/adapter.js"></script>
+</head>
+<body>
+
+  <div id="mainVideo">
+    <video id="localVideo" autoplay muted></video>
+  </div>
+  <div id="secondaryVideo">
+    <video id="remoteVideo" class="blueTint" autoplay></video>
+  </div>
+<div id="chatRoom">
+    <div class="person self">Hey there.</div>
+    <div class="person">Hello.  How is it going?</div>
+    <div class="person self">It is going well.</div>
+    <div class="person self">How are you?</div>
+    <div class="person">Doing well</div>
+</div>
+<input type="text" placeholder="Send message..." id="messageField">
+
+    <script src="js/video.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
