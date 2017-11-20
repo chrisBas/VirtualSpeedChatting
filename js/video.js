@@ -22,9 +22,14 @@ var sdpConstraints = {
 
 /////////////////////////////////////////////
 
-var room = 'foo';
-// Could prompt for room name:
-// room = prompt('Enter room name:');
+var room = window.location.hash.substring(1);
+if (!room) {
+  room = window.location.hash = randomToken();
+}
+
+function randomToken() {
+  return Math.floor((1 + Math.random()) * 1e16).toString(16).substring(1);
+}
 
 var socket = io.connect();
 

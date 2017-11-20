@@ -5,6 +5,7 @@ var nodeStatic = require('node-static');
 var https = require('https');
 var socketIO = require('socket.io');
 var fs = require('fs');
+var counterMap = {};
 
 var options = {
   key: fs.readFileSync('key.pem'),
@@ -16,26 +17,31 @@ var app = https.createServer(options, function(req, res) {
   fileServer.serve(req, res);
 }).listen(8080);
 
+
+
+
+// EXECUTED ON EVERY NEW REQUEST
 var io = socketIO.listen(app);
 io.sockets.on('connection', function(socket) {
 
-  // convenience function to log server messages on the client
   function log() {
-    var array = ['Message from server:'];
+    var array = ['SERVER:'];
     array.push.apply(array, arguments);
     socket.emit('log', array);
   }
 
   socket.on('message', function(message) {
-    log('Client said: ', message);
-    // for a real app, would be room-only (not broadcast)
-    socket.broadcast.emit('message', message);
+    log('CLIENT: ', message);
+    socket.rooms.forEach( function(room){
+      socket.broadcast.to(room).emit('message', message);
+    });
   });
 
   socket.on('create or join', function(room) {
     log('Received request to create or join room ' + room);
 
-    var numClients = io.sockets.sockets.length;
+    var clientsInRoom = io.nsps['/'].adapter.rooms[room];
+    var numClients = (clientsInRoom === undefined ? 0 : Object.keys(clientsInRoom).length)+1;
     log('Room ' + room + ' now has ' + numClients + ' client(s)');
 
     if (numClients === 1) {
